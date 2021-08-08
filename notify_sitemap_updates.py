@@ -39,6 +39,8 @@ def compare_two_lists(list1: list[Any], list2: list[Any]) -> bool:
 
 def main() -> None:
     sitemap_url = 'https://blog.abarabakuhatsu.com/sitemap/sitemap-0.xml'
+    sitemap_index_url = 'https://blog.abarabakuhatsu.com/sitemap/sitemap-index.xml'
+    google_request_url = 'https://www.google.com/ping?sitemap='
 
     local_sitemap: Path = Path('sitemap.xml')
     temp_file: Path = Path('temp.xml')
@@ -48,7 +50,7 @@ def main() -> None:
     if not local_sitemap.exists():
         local_sitemap.write_text(latest_sitemap)
         print("Downloaded the sitemap from the site for the first run")
-        return print("exit")
+        return print("notify_sitemap_updates.py exit")
 
     temp_file.write_text(latest_sitemap)
 
@@ -59,12 +61,17 @@ def main() -> None:
         print("** Sitemap has been updated **")
         print("Update local sitemap")
         local_sitemap.write_text(latest_sitemap)
+
         print("Notify Google of sitemap updates")
+        response = urllib.request.urlopen(google_request_url + sitemap_index_url)
+        print("--------------------------------")
+        print(response.read().decode('utf-8'))
+        print("--------------------------------")
     else:
         print("Sitemap has not been updated")
 
     temp_file.unlink() if temp_file.exists() else None
-    return print("exit")
+    return print("notify_sitemap_updates.py exit")
 
 
 if __name__ == '__main__':
