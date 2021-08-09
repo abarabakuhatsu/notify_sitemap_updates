@@ -39,10 +39,7 @@ def compare_two_lists(list1: list[Any], list2: list[Any]) -> bool:
 
 
 def main() -> None:
-    try:
-        sitemap_url: str = os.environ['SITEMAP_URL']
-    except KeyError as error:
-        return print(f"Eroor : Set the environment variable {error}")
+    sitemap_url: str = os.environ['SITEMAP_URL']
 
     try:
         sitemap_index_url: str = os.environ['SITEMAP_INDEX_URL']
