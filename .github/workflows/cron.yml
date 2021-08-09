@@ -17,8 +17,11 @@ jobs:
           python-version: '3.9'
           architecture: 'x64'
 
-      - name: Run Python
+      - name: Run notify sitemap updates
         run: python notify_sitemap_updates.py
+        env:
+          SITEMAP_URL: ${{ secrets.SITEMAP_URL }}
+          SITEMAP_INDEX_URL: ${{ secrets.SITEMAP_INDEX_URL }}
 
       - uses: matheusalbino/git-commit@v1.1.0
         with:
