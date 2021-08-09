@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from typing import Any
+import os
 from pathlib import Path
 import urllib.request
 import urllib.response
@@ -38,9 +39,18 @@ def compare_two_lists(list1: list[Any], list2: list[Any]) -> bool:
 
 
 def main() -> None:
-    sitemap_url = 'https://blog.abarabakuhatsu.com/sitemap/sitemap-0.xml'
-    sitemap_index_url = 'https://blog.abarabakuhatsu.com/sitemap/sitemap-index.xml'
-    google_request_url = 'https://www.google.com/ping?sitemap='
+    try:
+        sitemap_url: str = os.environ['SITEMAP_URL']
+    except KeyError as error:
+        return print(f"Eroor : Set the environment variable {error}")
+
+    try:
+        sitemap_index_url: str = os.environ['SITEMAP_INDEX_URL']
+    except KeyError:
+        sitemap_index_url = sitemap_url
+        print("Since SITEMAP_INDEX_URL is not set, SITEMAP_URL will be sent to google if there is an update")
+
+    google_request_url: str = 'https://www.google.com/ping?sitemap='
 
     local_sitemap: Path = Path('sitemap.xml')
     temp_file: Path = Path('temp.xml')
